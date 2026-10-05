@@ -161,6 +161,3 @@ authentication, multi-user isolation, retry policy, or transactional rollback.
 The provider interface is an extension point. A real provider would need its own
 implementation, response parsing, and operational safeguards; none are required
 to understand or run this showcase.
-
-License selection is pending owner review; see [LICENSE.md](LICENSE.md). Confirm
-rights and select a public license before publishing.
