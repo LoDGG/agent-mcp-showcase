@@ -1,8 +1,10 @@
 # AI Agent & MCP Showcase
 
-A small Python project that makes an agent's control flow easy to inspect:
-a provider proposes structured tool calls, the application validates them, and
-an MCP server performs operations on synthetic email in memory.
+A compact Python showcase of an explicit, controllable agent architecture:
+an `LLMProvider` abstraction proposes structured decisions, the agent validates
+tool arguments against JSON Schema, and an MCP client/server boundary separates
+decisions from execution. Provider iterations and tool calls are bounded, and
+all operations use synthetic email in a public-safe, in-memory environment.
 
 This is a portfolio-focused subset inspired by a larger private project. Generic
 conversation types, the explicit loop, MCP adapters, store behavior, and focused
@@ -17,6 +19,13 @@ It is not intended as a production email agent.
 - Client/server separation using the official Python MCP SDK.
 - Tool discovery, structured decisions, JSON Schema argument validation, and tool results.
 - Isolated synthetic state and automated tests without internet or API keys.
+
+## Design goals
+
+- **Inspectability:** Keep the agent loop, decisions, and tool results easy to follow.
+- **Control:** Validate tool requests and enforce explicit execution limits.
+- **Separation of concerns:** Give the provider, agent, MCP adapter, and store distinct responsibilities.
+- **Reproducibility:** Run deterministic demonstrations and isolated tests without external services.
 
 ## Example
 
@@ -34,9 +43,11 @@ Agent: September invoice labeled TO_REVIEW.
 Final labels: ['INBOX', 'TO_REVIEW']
 ```
 
-The fake provider uses returned IDs and results rather than executing tools itself.
-It supports this exact example request; scripted responses let tests explore other
-agent behavior. It is a deterministic policy, not a language model.
+`FakeLLMProvider` is deliberately deterministic so the demonstration is
+reproducible. It exercises the same `LLMProvider` contract a real LLM adapter
+would implement, using returned IDs and tool results to propose subsequent
+decisions. Its built-in policy supports the example request; scripted responses
+allow arbitrary test scenarios through that same contract. It is not a language model.
 
 ## Architecture
 
@@ -77,6 +88,8 @@ showcase. Direct Python makes validation, message history, and stopping conditio
 visible without framework-specific abstractions.
 
 ## Execution and validation
+
+**Maximum per run: 4 provider iterations and 3 tool calls.**
 
 `MAX_AGENT_ITERATIONS = 4` and `MAX_TOOL_CALLS = 3` are defined in `agent.py` and
 asserted in tests. Each provider completion consumes one iteration. The fourth

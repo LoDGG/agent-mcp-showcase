@@ -12,3 +12,8 @@ build/
 *.db
 *.sqlite*
 *.log
+
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
